@@ -32,6 +32,8 @@ plt.xlabel('Tenure (Años)')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_tenure.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por Tenure (%):")
+print(retention_tenure.to_string())
 
 # 2. Tasa de retención por Género
 plt.figure(figsize=(10, 6))
@@ -42,8 +44,8 @@ plt.xlabel('Género')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_gender.png'), bbox_inches='tight')
 plt.close()
-
-print(f"Nuevo gráfico guardado: {os.path.join(PLOTS_DIR, 'retention_by_gender.png')}")
+print("\nTasa de Retención por Género (%):")
+print(retention_gender.to_string())
 
 # 3. Barras de retención por NumOfProducts
 plt.figure(figsize=(10, 6))
@@ -54,6 +56,8 @@ plt.xlabel('Número de Productos')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_products.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por Número de Productos (%):")
+print(retention_products.to_string())	
 
 # 4. Heatmap de retención (Tenure vs. NumOfProducts)
 plt.figure(figsize=(12, 8))
@@ -64,8 +68,11 @@ plt.xlabel('Número de Productos')
 plt.ylabel('Tenure (Años)')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_heatmap.png'), bbox_inches='tight')
 plt.close()
+print("\nRetención (%) por Tenure y Número de Productos:")
+print(heatmap_data.to_string())
 
 # 5. Distribución de Balance por estado de actividad
+balance_stats = df.groupby('IsActiveMember')['Balance'].describe()
 plt.figure(figsize=(10, 6))
 sns.histplot(data=df, x='Balance', hue='IsActiveMember', multiple='stack', bins=30)
 plt.title('Distribución de Balance por Estado de Actividad')
@@ -73,6 +80,8 @@ plt.xlabel('Balance ($)')
 plt.ylabel('Frecuencia')
 plt.savefig(os.path.join(PLOTS_DIR, 'balance_distribution.png'), bbox_inches='tight')
 plt.close()
+print("\nDistribución de Balance por Estado de Actividad:")
+print(balance_stats.to_string())
 
 # 6. Tasa de retención por Geography
 plt.figure(figsize=(10, 6))
@@ -83,8 +92,10 @@ plt.xlabel('País')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_geography.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por Geografía (%):")
+print(retention_geography.to_string())
 
-# 7. Tasa de retención por rango de edad
+# 7. Tasa de retención por Age Range
 bins = [18, 30, 45, 60, 100]  # Rangos: 18-30, 31-45, 46-60, >60
 labels = ['18-30', '31-45', '46-60', '>60']
 df['AgeGroup'] = pd.cut(df['Age'], bins=bins, labels=labels, include_lowest=True)
@@ -96,8 +107,11 @@ plt.xlabel('Rango de Edad')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_age_group.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por Rango de Edad (%):")
+print(retention_age.to_string())
 
 # 8. Correlación entre CreditScore y retención
+creditscore_stats = df.groupby('IsActiveMember')['CreditScore'].describe()
 plt.figure(figsize=(10, 6))
 sns.scatterplot(data=df, x='CreditScore', y='IsActiveMember', alpha=0.5)
 plt.title('Relación entre CreditScore e IsActiveMember')
@@ -107,6 +121,9 @@ plt.savefig(os.path.join(PLOTS_DIR, 'creditscore_vs_retention.png'), bbox_inches
 plt.close()
 correlation = df['CreditScore'].corr(df['IsActiveMember'])
 print(f"Correlación entre CreditScore e IsActiveMember: {correlation:.2f}")
+print("Estadísticas de CreditScore por Estado de Actividad:")
+print(creditscore_stats.to_string())
+
 
 # 9. Retención por HasCrCard
 plt.figure(figsize=(10, 6))
@@ -117,6 +134,8 @@ plt.xlabel('Tiene Tarjeta de Crédito (0 = No, 1 = Sí)')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_hascrcard.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por HasCrCard (%):")
+print(retention_hascrcard.to_string())
 
 # 10. Retención por rango de salario
 bins_salary = [0, 50000, 100000, 150000, 200000]
@@ -130,16 +149,20 @@ plt.xlabel('Rango de Salario ($)')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_salary_range.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por Rango de Salario (%):")
+print(retention_salary.to_string())
 
 # 11. Heatmap de tasa de abandono (Exited) por Tenure y NumOfProducts
-plt.figure(figsize=(12, 8))
 churn_heatmap_data = df.pivot_table(values='Exited', index='Tenure', columns='NumOfProducts', aggfunc='mean') * 100
+plt.figure(figsize=(12, 8))
 sns.heatmap(churn_heatmap_data, annot=True, fmt='.1f', cmap='Reds')
 plt.title('Tasa de Abandono (%) por Tenure y Número de Productos')
 plt.xlabel('Número de Productos')
 plt.ylabel('Tenure (Años)')
 plt.savefig(os.path.join(PLOTS_DIR, 'churn_heatmap.png'), bbox_inches='tight')
 plt.close()
+print("\nHeatmap de Tasa de Abandono (%):")
+print(churn_heatmap_data.to_string())
 
 # 12. Balance promedio por estado de actividad
 plt.figure(figsize=(10, 6))
@@ -150,6 +173,8 @@ plt.xlabel('Estado de Actividad (0 = Inactivo, 1 = Activo)')
 plt.ylabel('Balance Promedio ($)')
 plt.savefig(os.path.join(PLOTS_DIR, 'avg_balance_by_activity.png'), bbox_inches='tight')
 plt.close()
+print("\nBalance Promedio por Estado de Actividad ($):")
+print(avg_balance.to_string())
 
 # 13. Retención por HasCrCard y Gender
 plt.figure(figsize=(10, 6))
@@ -161,5 +186,7 @@ plt.xlabel('Tiene Tarjeta de Crédito (0 = No, 1 = Sí)')
 plt.ylabel('% Usuarios Activos')
 plt.savefig(os.path.join(PLOTS_DIR, 'retention_by_hascrcard_gender.png'), bbox_inches='tight')
 plt.close()
+print("\nTasa de Retención por HasCrCard y Gender (%):")
+print(retention_hascrcard_gender.to_string())
 
 print(f"Todos los gráficos guardados en: {PLOTS_DIR}")
