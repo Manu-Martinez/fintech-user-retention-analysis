@@ -50,5 +50,5 @@ print("\nTipos de datos:")
 print(df.dtypes)
 
 # Guardar dataset limpio en formato compatible con Tableau
-df.to_csv(OUTPUT_FILE, index=False, encoding='utf-8', float_format='%.2f')
+df.to_csv(OUTPUT_FILE, encoding='utf-8', float_format='%.2f', index=False )
 print(f"Dataset limpio guardado en: {OUTPUT_FILE}")
