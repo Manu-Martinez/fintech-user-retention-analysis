@@ -89,7 +89,7 @@ bins = [18, 30, 45, 60, 100]  # Rangos: 18-30, 31-45, 46-60, >60
 labels = ['18-30', '31-45', '46-60', '>60']
 df['AgeGroup'] = pd.cut(df['Age'], bins=bins, labels=labels, include_lowest=True)
 plt.figure(figsize=(10, 6))
-retention_age = df.groupby('AgeGroup')['IsActiveMember'].mean() * 100
+retention_age = df.groupby('AgeGroup', observed=True)['IsActiveMember'].mean() * 100
 sns.barplot(x=retention_age.index, y=retention_age.values)
 plt.title('Tasa de Retención por Rango de Edad')
 plt.xlabel('Rango de Edad')
@@ -123,7 +123,7 @@ bins_salary = [0, 50000, 100000, 150000, 200000]
 labels_salary = ['0-50k', '50k-100k', '100k-150k', '150k-200k']
 df['SalaryRange'] = pd.cut(df['EstimatedSalary'], bins=bins_salary, labels=labels_salary, include_lowest=True)
 plt.figure(figsize=(10, 6))
-retention_salary = df.groupby('SalaryRange')['IsActiveMember'].mean() * 100
+retention_salary = df.groupby('SalaryRange', observed=True)['IsActiveMember'].mean() * 100
 sns.barplot(x=retention_salary.index, y=retention_salary.values)
 plt.title('Tasa de Retención por Rango de Salario Estimado')
 plt.xlabel('Rango de Salario ($)')
